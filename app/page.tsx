@@ -1,13 +1,18 @@
-import { Item } from "@/components/Item"
+import { Group } from "@/components/Group"
 import { prisma } from "@/db"
 import Link from "next/link"
 
-function getItems() {
-  return prisma.item.findMany()
+function getGroups() {
+  return prisma.group.findMany({
+    include: {
+      items: true,
+    },
+  })
 }
 
 export default async function Home() {
-  const items = await getItems()
+  const groups = await getGroups()
+  console.log(groups[0].items);
   return (
     <>
       <header className="flex justify-between items-center mb-4">
@@ -20,8 +25,8 @@ export default async function Home() {
         </Link>
       </header>
       <ul className="pl-4">
-        {items.map(item => (
-          <Item key={item.id} {...item} />
+        {groups.map(group => (
+          <Group key={group.id} {...group} />
         ))}
       </ul>
     </>
