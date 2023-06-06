@@ -1,4 +1,4 @@
-import { prisma } from "../../db.ts"
+import { prisma } from "@/db"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 
@@ -19,10 +19,10 @@ export default function Page() {
   return (
     <>
       <header className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl">Add new item</h1>
+        <h1 className="text-2xl">Add new category</h1>
       </header>
       <form action={createGroup} className="flex gap-2 flex-col">
-        <label for="title">Title</label>
+        <label htmlFor="title">Title</label>
         <input
           type="text"
           name="title"
