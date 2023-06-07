@@ -1,4 +1,5 @@
 import { Item } from "@/components/Item"
+import { prisma } from "@/db"
 import Link from "next/link"
 
 type GroupProps = {
@@ -8,6 +9,16 @@ type GroupProps = {
   createdAt: Date
   updatedAt: Date
   key: string
+}
+
+async function deleteItem(id: string) {
+  "use server"
+
+  await prisma.item.delete({
+    where: {
+      id: id
+    }
+  })
 }
 
 export function Group({ title, items, id }: GroupProps) {
@@ -27,7 +38,7 @@ export function Group({ title, items, id }: GroupProps) {
       </header>
       <ul>
         {items.map((item: any) => (
-          <Item key={item.id} {...item} />
+          <Item key={item.id} {...item} deleteItem={deleteItem} />
         ))}
       </ul>
     </>
