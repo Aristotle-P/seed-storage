@@ -10,14 +10,17 @@ type GroupProps = {
   key: string
 }
 
-export function Group({ title, items }: GroupProps) {
+export function Group({ title, items, id }: GroupProps) {
   return (
     <>
       <header className="flex justify-between items-center mb-4">
         <h3 className="text-2xl">{title}</h3>
         <Link
           className="border border-slate-300 text-slate-300 px-2 py-1 rounded hover:bg-slate-700 focus-within:bg-slate-700 outline-none"
-          href="/item"
+          href={{
+            pathname: "/item",
+            query: { group: id }
+          }}
         >
           Add Item
         </Link>
