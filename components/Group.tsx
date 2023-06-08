@@ -5,12 +5,13 @@ import Link from "next/link"
 type GroupProps = {
   id: string
   title: string
-  items: typeof Item[]
-  createdAt: Date
-  updatedAt: Date
-  key: string
-}
-
+  items: {
+    id: string
+    name: string
+    groupId: string
+    createdAt: Date
+    updatedAt: Date
+  }[]
 async function deleteItem(id: string) {
   "use server"
 
