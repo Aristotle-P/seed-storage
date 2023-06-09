@@ -12,6 +12,8 @@ type GroupProps = {
     createdAt: Date
     updatedAt: Date
   }[]
+}
+
 async function deleteItem(id: string) {
   "use server"
 
