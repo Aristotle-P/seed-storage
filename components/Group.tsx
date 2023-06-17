@@ -1,10 +1,13 @@
+"use client"
 import { Item } from "@/components/Item"
 import { prisma } from "@/db"
 import Link from "next/link"
+import { useState } from "react"
 
 type GroupProps = {
   id: string
   title: string
+  deleteItem: (id: string) => void
   items: {
     id: string
     name: string
@@ -14,17 +17,13 @@ type GroupProps = {
   }[]
 }
 
-async function deleteItem(id: string) {
-  "use server"
+export function Group({ title, items, id, deleteItem }: GroupProps) {
+  const [itemList, setItemList] = useState(items);
 
-  await prisma.item.delete({
-    where: {
-      id: id
-    }
-  })
-}
-
-export function Group({ title, items, id }: GroupProps) {
+  const handleDeleteState = (id: string) => {
+    const newItemList = itemList.filter(item => item.id !== id);
+    setItemList(newItemList);
+  }
   return (
     <>
       <header className="flex justify-between items-center mb-4">
@@ -40,8 +39,8 @@ export function Group({ title, items, id }: GroupProps) {
         </Link>
       </header>
       <ul>
-        {items.map((item: any) => (
-          <Item key={item.id} {...item} deleteItem={deleteItem} />
+        {itemList.map((item: any) => (
+          <Item key={item.id} {...item} deleteItem={deleteItem} handleDeleteState={handleDeleteState} />
         ))}
       </ul>
     </>

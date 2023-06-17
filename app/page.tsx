@@ -10,6 +10,16 @@ function getGroups() {
   })
 }
 
+async function deleteItem(id: string) {
+  "use server"
+
+  await prisma.item.delete({
+    where: {
+      id: id
+    }
+  })
+}
+
 export default async function Home() {
   const groups = await getGroups()
   console.log(groups[0].items);
@@ -26,7 +36,7 @@ export default async function Home() {
       </header>
       <ul className="pl-4">
         {groups.map(group => (
-          <Group key={group.id} {...group} />
+          <Group key={group.id} {...group} deleteItem={deleteItem} />
         ))}
       </ul>
     </>

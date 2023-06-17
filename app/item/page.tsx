@@ -44,6 +44,7 @@ export default function Page({ searchParams }: SearchParams) {
           name="groupId"
           defaultValue={searchParams.group}
           style={{ visibility: "hidden" }}
+          readOnly={true}
         />
         <div className="flex gap-1 justify-end">
           <Link
