@@ -1,6 +1,7 @@
-import { prisma } from "@/db"
+import { db } from "@/db"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import { items } from "@/src/db/schema"
 
 async function createItem(data: FormData) {
   "use server"
@@ -10,12 +11,13 @@ async function createItem(data: FormData) {
     throw new Error("Invalid Title")
   }
 
-  const groupId = data.get("groupId")?.valueOf()
-  if (typeof groupId !== "string" || groupId.length === 0) {
+  const initialGroupId = data.get("groupId")?.valueOf()
+  const groupId = Number(initialGroupId);
+  if (typeof groupId !== "number" || groupId === null) {
     throw new Error("Invalid Group")
   }
 
-  await prisma.item.create({ data: { name, groupId } })
+  await db.insert(items).values({ title: name, groupId })
 
   redirect("/")
 }

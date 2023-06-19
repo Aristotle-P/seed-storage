@@ -1,6 +1,7 @@
-import { prisma } from "@/db"
+import { db } from "@/db";
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import { groups } from "@/src/db/schema";
 
 async function createGroup(data: FormData) {
   "use server"
@@ -10,7 +11,7 @@ async function createGroup(data: FormData) {
     throw new Error("Invalid Title")
   }
 
-  await prisma.group.create({ data: { title } })
+  await db.insert(groups).values({ title })
 
   redirect("/")
 }

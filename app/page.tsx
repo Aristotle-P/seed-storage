@@ -1,28 +1,29 @@
-import { Group } from "@/components/Group"
-import { prisma } from "@/db"
+import { db } from "@/db"
+import { Group } from "@/components/Group";
 import Link from "next/link"
+import { items } from "@/src/db/schema";
+import { eq } from "drizzle-orm";
 
 function getGroups() {
-  return prisma.group.findMany({
-    include: {
+  const data = db.query.groups.findMany({
+    with: {
       items: true,
     },
-  })
-}
+  });
+  return data;
+};
 
-async function deleteItem(id: string) {
+async function deleteItem(id: number) {
   "use server"
 
-  await prisma.item.delete({
-    where: {
-      id: id
-    }
-  })
+  await db.delete(items).where(eq(items.id, id));
+  console.log('deleting item with id of', id);
 }
 
 export default async function Home() {
-  const groups = await getGroups()
-  console.log(groups[0].items);
+  const groups = await getGroups();
+  console.log('Your groups are...', groups);
+  console.log('Your items are...', groups[0].items);
   return (
     <>
       <header className="flex justify-between items-center mb-4">

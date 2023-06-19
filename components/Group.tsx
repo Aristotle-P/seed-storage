@@ -1,26 +1,24 @@
 "use client"
 import { Item } from "@/components/Item"
-import { prisma } from "@/db"
 import Link from "next/link"
 import { useState } from "react"
 
 type GroupProps = {
-  id: string
+  id: number
   title: string
-  deleteItem: (id: string) => void
+  key: number
   items: {
-    id: string
-    name: string
-    groupId: string
-    createdAt: Date
-    updatedAt: Date
+    id: number
+    title: string
+    groupId: number
   }[]
+  deleteItem: (id: number) => void
 }
 
-export function Group({ title, items, id, deleteItem }: GroupProps) {
+export function Group({ title, id, items, deleteItem }: GroupProps) {
   const [itemList, setItemList] = useState(items);
 
-  const handleDeleteState = (id: string) => {
+  const handleDeleteState = (id: number) => {
     const newItemList = itemList.filter(item => item.id !== id);
     setItemList(newItemList);
   }
@@ -39,7 +37,7 @@ export function Group({ title, items, id, deleteItem }: GroupProps) {
         </Link>
       </header>
       <ul>
-        {itemList.map((item: any) => (
+        {itemList.map(item => (
           <Item key={item.id} {...item} deleteItem={deleteItem} handleDeleteState={handleDeleteState} />
         ))}
       </ul>
