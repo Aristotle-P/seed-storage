@@ -1,27 +1,34 @@
-"use client"
 import { Item } from "@/components/Item"
 import Link from "next/link"
-import { useState } from "react"
+// import { useState } from "react"
+import { items } from "@/src/db/schema";
+import { eq } from "drizzle-orm";
+import { db } from "@/db"
+
+import { FaTrashAlt } from 'react-icons/fa';
 
 type GroupProps = {
   id: number
   title: string
   key: number
-  items: {
+  groupItems: {
     id: number
     title: string
     groupId: number
   }[]
-  deleteItem: (id: number) => void
 }
 
-export function Group({ title, id, items, deleteItem }: GroupProps) {
-  const [itemList, setItemList] = useState(items);
 
-  const handleDeleteState = (id: number) => {
-    const newItemList = itemList.filter(item => item.id !== id);
-    setItemList(newItemList);
-  }
+export function Group({ title, id, groupItems }: GroupProps) {
+  // const [itemList, setItemList] = useState(groupItems);
+
+  // const deleteItem = async (id: number) => {
+  //   await db.delete(items).where(eq(items.id, id));
+  //   const newItemList = itemList.filter(item => item.id !== id);
+  //   setItemList(newItemList);
+  //   console.log('deleting item with id of', id);
+  // }
+
   return (
     <>
       <header className="flex justify-between items-center mb-4">
@@ -37,10 +44,15 @@ export function Group({ title, id, items, deleteItem }: GroupProps) {
         </Link>
       </header>
       <ul>
-        {itemList.map(item => (
-          <Item key={item.id} {...item} deleteItem={deleteItem} handleDeleteState={handleDeleteState} />
+        {groupItems.map(item => (
+          <Item key={item.id} {...item} />
         ))}
       </ul>
+      {/*   <button onClick={() => { */}
+      {/*     deleteGroup(id); */}
+      {/*   }}> */}
+      {/*     <FaTrashAlt /> */}
+      {/*   </button> */}
     </>
   )
 }

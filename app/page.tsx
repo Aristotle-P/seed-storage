@@ -1,29 +1,32 @@
-import { db } from "@/db"
+"use client"
 import { Group } from "@/components/Group";
+import { useEffect, useState } from "react";
 import Link from "next/link"
-import { items } from "@/src/db/schema";
-import { eq } from "drizzle-orm";
 
-function getGroups() {
-  const data = db.query.groups.findMany({
-    with: {
-      items: true,
-    },
-  });
-  return data;
-};
-
-async function deleteItem(id: number) {
-  "use server"
-
-  await db.delete(items).where(eq(items.id, id));
-  console.log('deleting item with id of', id);
-}
 
 export default async function Home() {
-  const groups = await getGroups();
-  console.log('Your groups are...', groups);
-  console.log('Your items are...', groups[0].items);
+  // const [groupData, setGroupData] = useState<any[]>([]);
+  // useEffect(() => {
+  //   const getGroups = async () => {
+  //     const res = await fetch("/api/group", {
+  //       method: "GET",
+  //     })
+  //     const data = await res.json();
+  //     setGroupData(data);
+  //   };
+  //   getGroups();
+  // }, []);
+  //
+  // const deleteGroup = async (id: number) => {
+  //   await fetch(`/api/group/${id}`, {
+  //     method: "DELETE",
+  //   });
+  //   // const newGroupData = groupData.filter(item => item.id !== id);
+  //   // setGroupData(newGroupData);
+  //   // console.log('deleting item with id of', id);
+  // }
+  //
+
   return (
     <>
       <header className="flex justify-between items-center mb-4">
@@ -35,11 +38,18 @@ export default async function Home() {
           Add Category
         </Link>
       </header>
+      <p>Goodbye World</p>
       <ul className="pl-4">
-        {groups.map(group => (
-          <Group key={group.id} {...group} deleteItem={deleteItem} />
-        ))}
+        {/* {groupData.map(group => ( */}
+        {/*   <Group key={group.id} id={group.id} title={group.title} groupItems={group.items} /> */}
+        {/* ))} */}
       </ul>
+      <button onClick={() => {
+        // deleteGroup(1);
+        console.log('click :)')
+      }}>
+        I delete group 1
+      </button>
     </>
   )
 }
