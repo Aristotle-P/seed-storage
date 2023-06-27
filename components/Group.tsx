@@ -1,9 +1,6 @@
 import { Item } from "@/components/Item"
 import Link from "next/link"
-// import { useState } from "react"
-import { items } from "@/src/db/schema";
-import { eq } from "drizzle-orm";
-import { db } from "@/db"
+import { useState } from "react"
 
 import { FaTrashAlt } from 'react-icons/fa';
 
@@ -11,23 +8,26 @@ type GroupProps = {
   id: number
   title: string
   key: number
-  groupItems: {
+  items: {
     id: number
     title: string
     groupId: number
   }[]
+  deleteGroup: (id: number) => void
 }
 
 
-export function Group({ title, id, groupItems }: GroupProps) {
-  // const [itemList, setItemList] = useState(groupItems);
+export function Group({ title, id, items, deleteGroup }: GroupProps) {
+  const [itemList, setItemList] = useState(items);
 
-  // const deleteItem = async (id: number) => {
-  //   await db.delete(items).where(eq(items.id, id));
-  //   const newItemList = itemList.filter(item => item.id !== id);
-  //   setItemList(newItemList);
-  //   console.log('deleting item with id of', id);
-  // }
+  const deleteItem = async (id: number) => {
+    await fetch(`/api/item/${id}`, {
+      method: "DELETE",
+    });
+    const newItemList = itemList.filter(item => item.id !== id);
+    console.log(newItemList);
+    setItemList(newItemList);
+  }
 
   return (
     <>
@@ -44,15 +44,15 @@ export function Group({ title, id, groupItems }: GroupProps) {
         </Link>
       </header>
       <ul>
-        {groupItems.map(item => (
-          <Item key={item.id} {...item} />
+        {items.map(item => (
+          <Item key={item.id} {...item} deleteItem={deleteItem} />
         ))}
       </ul>
-      {/*   <button onClick={() => { */}
-      {/*     deleteGroup(id); */}
-      {/*   }}> */}
-      {/*     <FaTrashAlt /> */}
-      {/*   </button> */}
+      <button onClick={() => {
+        deleteGroup(id);
+      }}>
+        <FaTrashAlt />
+      </button>
     </>
   )
 }
