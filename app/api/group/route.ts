@@ -12,4 +12,4 @@ export const GET = async () => {
     console.log(error);
     return new Response("Failed to fetch groups", { status: 500 });
   }
-} 
+}

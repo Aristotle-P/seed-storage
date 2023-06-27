@@ -37,6 +37,24 @@ export default function Home() {
     console.log('deleting item with id of', id);
   }
 
+  const updateGroup = async (title: string, id: number) => {
+    if (typeof title !== "string" || title.length === 0) {
+      throw new Error("Invalid Title")
+    }
+    const data = { title, id }
+    await fetch(`/api/group/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+    console.log(title, id);
+    const newGroups = groups.map(group => {
+      if (group.id !== id) return group;
+      group.title = title;
+      return group;
+    })
+    setGroups(newGroups);
+  }
+
   return (
     <>
       <header className="flex justify-between items-center mb-4">
@@ -50,7 +68,7 @@ export default function Home() {
       </header>
       <ul className="pl-4">
         {groups.map(group => (
-          <Group key={group.id} id={group.id} title={group.title} items={group.items} deleteGroup={deleteGroup} />
+          <Group key={group.id} id={group.id} title={group.title} items={group.items} deleteGroup={deleteGroup} updateGroup={updateGroup} />
         ))}
       </ul>
     </>
