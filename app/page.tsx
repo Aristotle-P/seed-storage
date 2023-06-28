@@ -29,12 +29,11 @@ export default function Home() {
   }, []);
 
   const deleteGroup = async (id: number) => {
+    const newGroups = groups.filter(item => item.id !== id);
+    setGroups(newGroups);
     await fetch(`/api/group/${id}`, {
       method: "DELETE",
     });
-    const newGroups = groups.filter(item => item.id !== id);
-    setGroups(newGroups);
-    console.log('deleting item with id of', id);
   }
 
   const updateGroup = async (title: string, id: number) => {
@@ -42,17 +41,16 @@ export default function Home() {
       throw new Error("Invalid Title")
     }
     const data = { title, id }
-    await fetch(`/api/group/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    });
-    console.log(title, id);
     const newGroups = groups.map(group => {
       if (group.id !== id) return group;
       group.title = title;
       return group;
     })
     setGroups(newGroups);
+    await fetch(`/api/group/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
   }
 
   return (
@@ -61,9 +59,9 @@ export default function Home() {
         <h1 className="text-2xl">Seeds</h1>
         <Link
           className="border border-slate-300 text-slate-300 px-2 py-1 rounded hover:bg-slate-700 focus-within:bg-slate-700 outline-none"
-          href="/category"
+          href="/group"
         >
-          Add Category
+          Add Group
         </Link>
       </header>
       <ul className="pl-4">

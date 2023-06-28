@@ -23,13 +23,29 @@ export function Group({ title, id, items, deleteGroup, updateGroup }: GroupProps
   const [edit, setEdit] = useState(false);
 
   const deleteItem = async (id: number) => {
+    const newItemList = itemList.filter(item => item.id !== id);
+    setItemList(newItemList);
     await fetch(`/api/item/${id}`, {
       method: "DELETE",
     });
-    const newItemList = itemList.filter(item => item.id !== id);
-    setItemList(newItemList);
   }
 
+  const updateItem = async (title: string, id: number) => {
+    if (typeof title !== "string" || title.length === 0) {
+      throw new Error("Invalid Title")
+    }
+    const data = { title, id }
+    const newItems = itemList.map(item => {
+      if (item.id !== id) return item;
+      item.title = title;
+      return item;
+    })
+    setItemList(newItems);
+    await fetch(`/api/item/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  }
 
   const handleEdit = (e: any) => {
     if (e.key === 'Enter' || e.key === 'Escape') {
@@ -55,7 +71,13 @@ export function Group({ title, id, items, deleteGroup, updateGroup }: GroupProps
         ) : (
           <h3 className="text-2xl" onClick={() => {
             setEdit(true);
-          }}>{title}</h3>
+          }}>{title}
+            <button onClick={() => {
+              deleteGroup(id);
+            }}>
+              <FaTrashAlt />
+            </button>
+          </h3>
         )
         }
         <Link
@@ -70,14 +92,9 @@ export function Group({ title, id, items, deleteGroup, updateGroup }: GroupProps
       </header>
       <ul>
         {itemList.map(item => (
-          <Item key={item.id} {...item} deleteItem={deleteItem} />
+          <Item key={item.id} {...item} deleteItem={deleteItem} updateItem={updateItem} />
         ))}
       </ul>
-      <button onClick={() => {
-        deleteGroup(id);
-      }}>
-        <FaTrashAlt />
-      </button>
     </>
   )
 }

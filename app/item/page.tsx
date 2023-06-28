@@ -39,6 +39,7 @@ export default function Page({ searchParams }: SearchParams) {
         <input
           type="text"
           name="name"
+          autoFocus
           className="border border-slate-300 bg-transparent rounded px-2 py-1 outline-none focus-within:border-slate-100"
         />
         <input
